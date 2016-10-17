@@ -22,9 +22,11 @@ namespace HexagonGenerator
     {
 
         private Canvas _canvas;
-        private double _hexagonSideLength = 20.0;
+        private double _hexagonSideLength = 10.0;
         private int _hexagonSideCount = 10;
-        public int _hexagonMaxLengthCount { get { return 2 * _hexagonSideCount - 1;  } }
+        private int _oxigenReducerCount = 40;
+
+        private int _hexagonMaxLengthCount { get { return 2 * _hexagonSideCount - 1; } }
 
         public MainWindow()
         {
@@ -33,6 +35,8 @@ namespace HexagonGenerator
             CreateCanvas();
 
             DrawGrid();
+
+            DistributeOxigenReducers();
 
         }
 
@@ -62,7 +66,7 @@ namespace HexagonGenerator
             _canvas.Children.Add(ellipse);
         }
 
-        public void DrawHexagonAbsolute(double x, double y)
+        public void DrawHexagonAbsolute(double x, double y, double distanceToMainAxis)
         {
             Polygon hexagon = new Polygon();
             hexagon.Stroke = Brushes.Black;
@@ -77,10 +81,35 @@ namespace HexagonGenerator
 
             };
 
+            hexagon.DataContext = CalculateProbabilityFactor(distanceToMainAxis);
+
             Canvas.SetLeft(hexagon, x);
             Canvas.SetTop(hexagon, y);
 
             _canvas.Children.Add(hexagon);
+        }
+
+        public double CalculateProbabilityFactor(double distanceToMainAxis)
+        {
+            var variance = 1.0;
+            return (1 / (variance * Math.Sqrt(2 * Math.PI))) * Math.Pow(Math.E, -0.5 * Math.Pow(distanceToMainAxis / variance, 2.0));
+        }
+
+        public void DistributeOxigenReducers()
+        {
+            var rnd = new Random();
+            var results = new Dictionary<Polygon, double>();
+            foreach (Polygon hexagon in _canvas.Children)
+            {
+                var score = rnd.Next(1, 10) * (1 + (double)hexagon.DataContext);
+                results.Add(hexagon, score);
+            }
+
+            foreach (var result in results.OrderByDescending(pair => pair.Value).Take(_oxigenReducerCount))
+            {
+                var hexagon = result.Key;
+                hexagon.Fill = Brushes.Red;
+            }
         }
 
         public void DrawHexagonOnGrid(int rowIndex, int colIndex)
@@ -97,8 +126,11 @@ namespace HexagonGenerator
 
             double y = _hexagonSideLength + rowIndex * 1.5 * _hexagonSideLength;
 
-            DrawHexagonAbsolute(x - ((_hexagonSideLength * Math.Sqrt(3.0)) / 2.0), y - _hexagonSideLength);
+            var distanceToMainAxis = Math.Abs(Math.Round(_hexagonMaxLengthCount / 2.0, MidpointRounding.ToEven) - rowIndex);
+
+            DrawHexagonAbsolute(x - ((_hexagonSideLength * Math.Sqrt(3.0)) / 2.0), y - _hexagonSideLength, distanceToMainAxis);
         }
+        
 
         public void DrawGrid()
         {
