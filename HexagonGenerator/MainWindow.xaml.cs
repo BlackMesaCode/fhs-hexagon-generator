@@ -22,8 +22,8 @@ namespace HexagonGenerator
     {
 
         private Canvas _canvas;
-        private double _hexagonSideLength = 50.0;
-        private int _hexagonSideCount = 4;
+        private double _hexagonSideLength = 20.0;
+        private int _hexagonSideCount = 3;
         public int _hexagonMaxLengthCount { get { return 2 * _hexagonSideCount - 1;  } }
 
         public MainWindow()
@@ -38,11 +38,11 @@ namespace HexagonGenerator
 
         public void CreateCanvas()
         {
-            var canvasLength = (2 * _hexagonSideCount - 1) * _hexagonSideLength * Math.Sqrt(3.0);
+            var canvasLength = 2 * _hexagonSideCount * _hexagonSideLength * Math.Sqrt(3.0);
 
             _canvas = new Canvas();
             _canvas.Width = canvasLength;
-            _canvas.Height = canvasLength;
+            _canvas.Height = canvasLength * (Math.Sqrt(3.0) / 2.0);
             _canvas.Background = new SolidColorBrush(Colors.LightGray);
             _canvas.Margin = new Thickness(10.0);
 
@@ -97,7 +97,7 @@ namespace HexagonGenerator
 
             double y = _hexagonSideLength + rowIndex * 1.5 * _hexagonSideLength;
 
-            DrawHexagonAbsolute(x, y);
+            DrawHexagonAbsolute(x - ((_hexagonSideLength * Math.Sqrt(3.0)) / 2.0), y - _hexagonSideLength);
         }
 
         public void DrawGrid()
@@ -105,12 +105,18 @@ namespace HexagonGenerator
             var currentHexagonRowCount = _hexagonSideCount;
             for (int rowIndex = 0; rowIndex < _hexagonMaxLengthCount; rowIndex++)
             {
-                for (int colIndex = 0; colIndex < _hexagonMaxLengthCount; colIndex++)
+                int indexOffset;
+                if (rowIndex % 2 == 0)
                 {
-                    var margin = Math.Round((GetHexagonMaxCountByRow(rowIndex) - currentHexagonRowCount) / 2.0, MidpointRounding.AwayFromZero);
-
-                    if (colIndex >= margin && colIndex < _hexagonMaxLengthCount - margin)
-                        DrawHexagonOnGrid(rowIndex, colIndex);   
+                    indexOffset = (int)Math.Round((_hexagonMaxLengthCount - currentHexagonRowCount) / 2.0, MidpointRounding.AwayFromZero);
+                }
+                else
+                {
+                    indexOffset = (int)Math.Round((_hexagonMaxLengthCount - currentHexagonRowCount) / 2.0, MidpointRounding.ToEven); 
+                }
+                for (int colIndex = 0; colIndex < currentHexagonRowCount; colIndex++)
+                {
+                    DrawHexagonOnGrid(rowIndex, colIndex + indexOffset);
                 }
                 if (rowIndex >= _hexagonMaxLengthCount / 2)
                     currentHexagonRowCount--;
@@ -118,20 +124,6 @@ namespace HexagonGenerator
                     currentHexagonRowCount++;
             }
         }
-
-
-        public int GetHexagonMaxCountByRow(int rowIndex)
-        {
-            if (rowIndex % 2 == 0)
-            {
-                return _hexagonMaxLengthCount;
-            }
-            else
-            {
-                return _hexagonMaxLengthCount - 1;
-            }
-        }
-
 
 
     }
