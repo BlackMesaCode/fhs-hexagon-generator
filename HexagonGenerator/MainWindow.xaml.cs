@@ -23,7 +23,7 @@ namespace HexagonGenerator
 
         private Canvas _canvas;
         private double _hexagonSideLength = 20.0;
-        private int _hexagonSideCount = 3;
+        private int _hexagonSideCount = 10;
         public int _hexagonMaxLengthCount { get { return 2 * _hexagonSideCount - 1;  } }
 
         public MainWindow()
