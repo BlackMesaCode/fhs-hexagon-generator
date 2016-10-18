@@ -47,10 +47,10 @@ namespace HexagonGenerator
             _canvas = new Canvas();
             _canvas.Width = canvasLength;
             _canvas.Height = canvasLength * (Math.Sqrt(3.0) / 2.0);
-            _canvas.Background = new SolidColorBrush(Colors.LightGray);
+            //_canvas.Background = new SolidColorBrush(Colors.LightGray);
             _canvas.Margin = new Thickness(10.0);
 
-            MainGrid.Children.Add(_canvas);
+            Panel.Children.Add(_canvas);
         }
 
         public void DrawPoint(double x, double y)
@@ -157,6 +157,18 @@ namespace HexagonGenerator
             }
         }
 
+        public void Reset()
+        {
+            foreach (Polygon hexagon in _canvas.Children)
+            {
+                hexagon.Fill = Brushes.LightBlue;
+            }
+        }
 
+        private void GenerateOxigenReducers_Click(object sender, RoutedEventArgs e)
+        {
+            Reset();
+            DistributeOxigenReducers();
+        }
     }
 }

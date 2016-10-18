@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         SizeToContent="WidthAndHeight"
         Title="MainWindow">
-    <Grid Name="MainGrid">
-        
-    </Grid>
+    <StackPanel Name="Panel" Orientation="Vertical">
+        <Button Name="GenerateOxigenReducers" Click="GenerateOxigenReducers_Click">Generate Oxigen Reducers</Button>
+    </StackPanel>
 </Window>
