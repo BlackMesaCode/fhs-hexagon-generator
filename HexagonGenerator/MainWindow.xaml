@@ -11,11 +11,21 @@
         WindowStartupLocation="CenterScreen"
         Title="MainWindow"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <!--<Window.Background>
+        <ImageBrush ImageSource="background.jpg" AlignmentY="Top" Stretch="None" TileMode="FlipY" Viewport="0,0,10,10" ViewportUnits="Absolute"></ImageBrush>
+    </Window.Background>-->
     <StackPanel Name="Panel" Orientation="Horizontal" Margin="10">
         <Viewbox Stretch="Uniform" Name="ViewBox"></Viewbox>
         <StackPanel Name="MenuPanel" Orientation="Vertical" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center">
             <!--<Button Name="SaveAsImage" Click="SaveAsImage_Click">Save As Image</Button>-->
-            
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Size: </TextBlock>
+                <TextBlock Margin="5 0 0 0"  Text="{Binding Path=HexagonSideCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+            <Slider Name="Size" Minimum="4" Maximum="10" TickFrequency="2" IsSnapToTickEnabled ="True"  Value="{Binding Path=HexagonSideCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+
             <StackPanel Orientation="Horizontal">
                 <TextBlock>O2 Gainer Count:</TextBlock>
                 <TextBlock Margin="5 0 0 0"  Text="{Binding Path=OxigenGainerCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -35,16 +45,34 @@
             </StackPanel>
             <Slider Name="GainerVariance" Minimum="0.1" Maximum="10" Value="{Binding Path=OxigenGainerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
-            
-            <StackPanel Orientation="Horizontal">
+
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                 <TextBlock>O2 Reducer Variance</TextBlock>
                 <TextBlock Margin="5 0 0 0"  Text="{Binding Path=OxigenReducerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </StackPanel>
-            <Slider Name="ReducerVariance" Minimum="0.1" Maximum="10" Value="{Binding Path=OxigenReducerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            <Slider Name="ReducerVariance" Minimum="0.1" Maximum="10" Margin="0 0 0 10" Value="{Binding Path=OxigenReducerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+            <Button Name="GenerateMap" Click="GenerateMap_Click" Padding="10" Margin="0 0 0 10">Generate Map</Button>
             
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" FontSize="20" Padding="10">Oxigen: </TextBlock>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Center" Text="{Binding Path=OxigenCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Padding="10" FontSize="20"></TextBlock>
+            </Grid>
             
-            <Button Name="GenerateMap" Click="GenerateMap_Click">Generate Map</Button>
-            <Button Name="Close" Click="Close_Click">Close Game</Button>
+            <Grid Margin="0 0 0 60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="DeceaseOxigenButton" Click="DeceaseOxigenButton_Click" Padding="10">--</Button>
+                <Button Grid.Column="1" Name="IncreaseOxigenButton" Click="IncreaseOxigenButton_Click" Padding="10">++</Button>
+            </Grid>
+
+            <Button Name="Close" Click="Close_Click" Padding="10">Close Game</Button>
         </StackPanel>
         
     </StackPanel>

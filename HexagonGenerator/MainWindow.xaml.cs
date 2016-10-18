@@ -24,7 +24,29 @@ namespace HexagonGenerator
 
         private Canvas _canvas;
         private double _hexagonSideLength = 10.0;
+
+
+        private int _oxigenCount;
+        public int OxigenCount
+        {
+            get { return _oxigenCount; }
+            set
+            {
+                _oxigenCount = value;
+                Notify("OxigenCount");
+            }
+        }
+
         private int _hexagonSideCount = 10;
+        public int HexagonSideCount
+        {
+            get { return _hexagonSideCount; }
+            set
+            {
+                _hexagonSideCount = value;
+                Notify("HexagonSideCount");
+            }
+        }
 
         private int _oxigenReducerCount = 60;
         public int OxigenReducerCount
@@ -82,7 +104,7 @@ namespace HexagonGenerator
 
             CreateCanvas();
 
-            DrawGrid();
+            
 
             GenerateMap_Click(null, null);
 
@@ -224,6 +246,8 @@ namespace HexagonGenerator
 
         public void DrawGrid()
         {
+            _hexagonSideLength = (_hexagonMaxLengthCount / HexagonSideCount) * 10.0;
+
             var currentHexagonRowCount = _hexagonSideCount;
             for (int rowIndex = 0; rowIndex < _hexagonMaxLengthCount; rowIndex++)
             {
@@ -249,17 +273,20 @@ namespace HexagonGenerator
 
         public void Reset()
         {
-            foreach (Polygon hexagon in _canvas.Children)
-            {
-                hexagon.Fill = Brushes.LightBlue;
-            }
+            _canvas.Children.Clear();
+            //foreach (Polygon hexagon in _canvas.Children)
+            //{
+            //    hexagon.Fill = Brushes.LightBlue;
+            //}
         }
 
         private void GenerateMap_Click(object sender, RoutedEventArgs e)
         {
             Reset();
+            DrawGrid();
             DistributeOxigenReducers();
             DistributeOxigenGainers();
+            OxigenCount = HexagonSideCount;
         }
 
         //private void SaveAsImage_Click(object sender, RoutedEventArgs e)
@@ -283,7 +310,9 @@ namespace HexagonGenerator
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure?", "Close Confirmation", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+                Application.Current.Shutdown();
         }
 
 
@@ -296,6 +325,16 @@ namespace HexagonGenerator
             {
                 this.PropertyChanged(this, new PropertyChangedEventArgs(argument));
             }
+        }
+
+        private void DeceaseOxigenButton_Click(object sender, RoutedEventArgs e)
+        {
+            OxigenCount--;
+        }
+
+        private void IncreaseOxigenButton_Click(object sender, RoutedEventArgs e)
+        {
+            OxigenCount++;
         }
     }
 }
