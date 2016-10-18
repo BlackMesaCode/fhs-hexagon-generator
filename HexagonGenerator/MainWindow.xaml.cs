@@ -119,7 +119,7 @@ namespace HexagonGenerator
             _canvas.Height = canvasLength * (Math.Sqrt(3.0) / 2.0);
             //_canvas.HorizontalAlignment = HorizontalAlignment.Stretch;
             //_canvas.VerticalAlignment = VerticalAlignment.Stretch;
-            //_canvas.Background = new SolidColorBrush(Colors.Red);
+            //_canvas.Background = new SolidColorBrush(Colors.Yellow);
             _canvas.Margin = new Thickness(10.0);
 
             ViewBox.Child = _canvas;
@@ -246,6 +246,7 @@ namespace HexagonGenerator
 
         public void DrawGrid()
         {
+            //_hexagonSideLength = _canvas.Width / (_hexagonMaxLengthCount * HexagonSideCount * Math.Sqrt(3));
             _hexagonSideLength = (_hexagonMaxLengthCount / HexagonSideCount) * 10.0;
 
             var currentHexagonRowCount = _hexagonSideCount;
@@ -274,10 +275,6 @@ namespace HexagonGenerator
         public void Reset()
         {
             _canvas.Children.Clear();
-            //foreach (Polygon hexagon in _canvas.Children)
-            //{
-            //    hexagon.Fill = Brushes.LightBlue;
-            //}
         }
 
         private void GenerateMap_Click(object sender, RoutedEventArgs e)
@@ -289,24 +286,6 @@ namespace HexagonGenerator
             OxigenCount = HexagonSideCount;
         }
 
-        //private void SaveAsImage_Click(object sender, RoutedEventArgs e)
-        //{
-
-
-        //    RenderTargetBitmap rtb = new RenderTargetBitmap((int)_canvas.RenderSize.Width,
-        //    (int)_canvas.RenderSize.Height, 96d, 96d, System.Windows.Media.PixelFormats.Default);
-        //    rtb.Render(_canvas);
-
-        //    var crop = new CroppedBitmap(rtb, new Int32Rect(0, 0, (int)_canvas.RenderSize.Width, (int)_canvas.RenderSize.Height));
-
-        //    BitmapEncoder pngEncoder = new PngBitmapEncoder();
-        //    pngEncoder.Frames.Add(BitmapFrame.Create(crop));
-
-        //    using (var fs = System.IO.File.OpenWrite("canvas.png"))
-        //    {
-        //        pngEncoder.Save(fs);
-        //    }
-        //}
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
