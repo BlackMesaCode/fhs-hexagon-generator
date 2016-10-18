@@ -5,9 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HexagonGenerator"
         mc:Ignorable="d"
-        SizeToContent="WidthAndHeight"
-        Title="MainWindow">
-    <StackPanel Name="Panel" Orientation="Vertical">
-        <Button Name="GenerateOxigenReducers" Click="GenerateOxigenReducers_Click">Generate Oxigen Reducers</Button>
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <StackPanel Name="Panel" Orientation="Horizontal" Margin="10">
+        <Viewbox Stretch="Uniform" Name="ViewBox"></Viewbox>
+        <StackPanel Name="MenuPanel" Orientation="Vertical" Width="400" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <!--<Button Name="SaveAsImage" Click="SaveAsImage_Click">Save As Image</Button>-->
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>O2 Gainer Count:</TextBlock>
+                <TextBlock Margin="5 0 0 0"  Text="{Binding Path=OxigenGainerCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+            <Slider Name="GainerCount" Minimum="0" Maximum="100" Value="{Binding Path=OxigenGainerCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>O2 Reducer Count</TextBlock>
+                <TextBlock Margin="5 0 0 0"  Text="{Binding Path=OxigenReducerCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+            <Slider Name="ReducerCount" Minimum="0" Maximum="100" Value="{Binding Path=OxigenReducerCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>O2 Gainer Variance</TextBlock>
+                <TextBlock Margin="5 0 0 0"  Text="{Binding Path=OxigenGainerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+            <Slider Name="GainerVariance" Minimum="0.1" Maximum="10" Value="{Binding Path=OxigenGainerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>O2 Reducer Variance</TextBlock>
+                <TextBlock Margin="5 0 0 0"  Text="{Binding Path=OxigenReducerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+            <Slider Name="ReducerVariance" Minimum="0.1" Maximum="10" Value="{Binding Path=OxigenReducerVariance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            
+            
+            <Button Name="GenerateMap" Click="GenerateMap_Click">Generate Map</Button>
+            <Button Name="Close" Click="Close_Click">Close Game</Button>
+        </StackPanel>
+        
     </StackPanel>
 </Window>
