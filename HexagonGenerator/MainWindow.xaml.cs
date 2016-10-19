@@ -48,6 +48,17 @@ namespace HexagonGenerator
             }
         }
 
+        private int _gravityGunsCount = 60;
+        public int GravityGunsCount
+        {
+            get { return _gravityGunsCount; }
+            set
+            {
+                _gravityGunsCount = value;
+                Notify("GravityGunsCount");
+            }
+        }
+
         private int _oxigenReducerCount = 60;
         public int OxigenReducerCount
         {
@@ -198,6 +209,8 @@ namespace HexagonGenerator
             }
         }
 
+        Dictionary<Polygon, double> OxigenGainer = new Dictionary<Polygon, double>();
+
         public void DistributeOxigenGainers()
         {
             var rnd = new Random();
@@ -214,13 +227,62 @@ namespace HexagonGenerator
                 }
             }
 
-            foreach (var result in results.OrderByDescending(pair => pair.Value).Take(_oxigenGainerCount))
+            OxigenGainer = results.OrderByDescending(pair => pair.Value).Take(_oxigenGainerCount).ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var result in OxigenGainer)
             {
                 var hexagon = result.Key;
                 hexagon.Fill = Brushes.Green;
+                hexagon.MouseLeftButtonDown += OxigenGainer_MouseLeftButtonDown;
             }
         }
 
+
+        Dictionary<Polygon, double> GravityGun = new Dictionary<Polygon, double>();
+
+        public void DistributeGravityGuns()
+        {
+            var rnd = new Random();
+            var results = new Dictionary<Polygon, double>();
+            foreach (Polygon hexagon in _canvas.Children)
+            {
+                var hexagonData = hexagon.DataContext as HexagonData;
+                if (hexagonData.RowIndex != Math.Floor(_hexagonMaxLengthCount / 2.0) &&
+                    !(hexagonData.ColIndex == 0 || hexagonData.ColIndex == _hexagonMaxLengthCount - 1) && !OxigenReducers.ContainsKey(hexagon) && !OxigenGainer.ContainsKey(hexagon))
+                {
+                    //var probability = CalculateProbabilityFactor(10.0, hexagonData.DistanceToMainAxis);
+                    var score = rnd.Next(1, 100);
+                    results.Add(hexagon, score);
+                }
+            }
+
+            GravityGun = results.OrderByDescending(pair => pair.Value).Take(GravityGunsCount).ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var result in GravityGun)
+            {
+                var hexagon = result.Key;
+                hexagon.Fill = Brushes.Yellow;
+                hexagon.MouseLeftButtonDown += GravityGun_MouseLeftButtonDown;
+            }
+        }
+
+        private void GravityGun_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var hexagon = sender as Polygon;
+            if (hexagon.Fill == Brushes.Yellow)
+                hexagon.Fill = Brushes.LightBlue;
+            else
+                hexagon.Fill = Brushes.Yellow;
+        }
+
+        private void OxigenGainer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var hexagon = sender as Polygon;
+            if (hexagon.Fill == Brushes.Green)
+                hexagon.Fill = Brushes.LightBlue;
+            else
+                hexagon.Fill = Brushes.Green;
+        }
 
         public void DrawHexagonOnGrid(int rowIndex, int colIndex)
         {
@@ -283,6 +345,7 @@ namespace HexagonGenerator
             DrawGrid();
             DistributeOxigenReducers();
             DistributeOxigenGainers();
+            DistributeGravityGuns();
             OxigenCount = HexagonSideCount;
         }
 

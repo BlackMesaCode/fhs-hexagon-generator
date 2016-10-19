@@ -25,6 +25,12 @@
             </StackPanel>
             <Slider Name="Size" Minimum="4" Maximum="10" TickFrequency="2" IsSnapToTickEnabled ="True"  Value="{Binding Path=HexagonSideCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Gravity Guns Count:</TextBlock>
+                <TextBlock Margin="5 0 0 0"  Text="{Binding Path=GravityGunsCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+            <Slider Name="GravityGunsCountSlider" Minimum="0" Maximum="100" Value="{Binding Path=GravityGunsCount, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock>O2 Gainer Count:</TextBlock>
